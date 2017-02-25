@@ -1,12 +1,12 @@
 'use strict';
 
-const db                                   = require('./db');
-const passport                             = require('passport');
-const { Strategy: LocalStrategy }          = require('passport-local');
-const { BasicStrategy }                    = require('passport-http');
+const db = require('./db');
+const passport = require('passport');
+const { Strategy: LocalStrategy } = require('passport-local');
+const { BasicStrategy } = require('passport-http');
 const { Strategy: ClientPasswordStrategy } = require('passport-oauth2-client-password');
-const { Strategy: BearerStrategy }         = require('passport-http-bearer');
-const validate                             = require('./validate');
+const { Strategy: BearerStrategy } = require('passport-http-bearer');
+const validate = require('./validate');
 
 /**
  * LocalStrategy
@@ -17,9 +17,9 @@ const validate                             = require('./validate');
  */
 passport.use(new LocalStrategy((username, password, done) => {
   db.users.findByUsername(username)
-  .then(user => validate.user(user, password))
-  .then(user => done(null, user))
-  .catch(() => done(null, false));
+    .then(user => validate.user(user, password))
+    .then(user => done(null, user))
+    .catch(() => done(null, false));
 }));
 
 /**
@@ -35,9 +35,9 @@ passport.use(new LocalStrategy((username, password, done) => {
  */
 passport.use(new BasicStrategy((clientId, clientSecret, done) => {
   db.clients.findByClientId(clientId)
-  .then(client => validate.client(client, clientSecret))
-  .then(client => done(null, client))
-  .catch(() => done(null, false));
+    .then(client => validate.client(client, clientSecret))
+    .then(client => done(null, client))
+    .catch(() => done(null, false));
 }));
 
 /**
@@ -49,9 +49,9 @@ passport.use(new BasicStrategy((clientId, clientSecret, done) => {
  */
 passport.use(new ClientPasswordStrategy((clientId, clientSecret, done) => {
   db.clients.findByClientId(clientId)
-  .then(client => validate.client(client, clientSecret))
-  .then(client => done(null, client))
-  .catch(() => done(null, false));
+    .then(client => validate.client(client, clientSecret))
+    .then(client => done(null, client))
+    .catch(() => done(null, false));
 }));
 
 /**
@@ -67,9 +67,9 @@ passport.use(new ClientPasswordStrategy((clientId, clientSecret, done) => {
  */
 passport.use(new BearerStrategy((accessToken, done) => {
   db.accessTokens.find(accessToken)
-  .then(token => validate.token(token, accessToken))
-  .then(token => done(null, token, { scope: '*' }))
-  .catch(() => done(null, false));
+    .then(token => validate.token(token, accessToken))
+    .then(token => done(null, token, { scope: '*' }))
+    .catch(() => done(null, false));
 }));
 
 // Register serialialization and deserialization functions.
@@ -91,6 +91,6 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser((id, done) => {
   db.users.find(id)
-  .then(user => done(null, user))
-  .catch(err => done(err));
+    .then(user => done(null, user))
+    .catch(err => done(err));
 });

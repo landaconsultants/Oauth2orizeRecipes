@@ -15,10 +15,10 @@ const {
   tokenInfo,
 } = require('./properties.js');
 const promisify = require('es6-promisify');
-const request   = require('request').defaults({ jar : true, strictSSL : false }); // eslint-disable-line
+const request = require('request').defaults({ jar: true, strictSSL: false }); // eslint-disable-line
 
-const get  = promisify(request.get, { multiArgs : true });
-const post = promisify(request.post, { multiArgs : true });
+const get = promisify(request.get, { multiArgs: true });
+const post = promisify(request.post, { multiArgs: true });
 
 /**
  * These are all request helpers to help with testing
@@ -28,21 +28,21 @@ module.exports = {
    * Logins as the login dialog/form would
    * @returns {Promise} The login success
    */
-  login : () => post(login, { form : { username, password } }),
+  login: () => post(login, { form: { username, password } }),
 
   /**
    * Posts to the OAuth2 Authorization server the code to get the access token
    * @param   {String}  code  - The Authorization code
    * @returns {Promise} The auth code resolved
    */
-  postOAuthCode : code =>
+  postOAuthCode: code =>
     post(token, {
-      form : {
+      form: {
         code,
-        redirect_uri  : redirect,
-        client_id     : clientId,
-        client_secret : clientSecret,
-        grant_type    : 'authorization_code',
+        redirect_uri: redirect,
+        client_id: clientId,
+        client_secret: clientSecret,
+        grant_type: 'authorization_code',
       },
     }),
 
@@ -51,17 +51,17 @@ module.exports = {
    * @param   {String}  scope - The optional scope to use
    * @returns {Promise} OAuthPassword resolved
    */
-  postOAuthPassword : (scope) => {
+  postOAuthPassword: (scope) => {
     const basicAuth = new Buffer(`${clientId}:${clientSecret}`).toString('base64');
     return post(token, {
-      form : {
+      form: {
         username,
         password,
         scope,
         grant_type: 'password',
       },
-      headers : {
-        Authorization : `Basic ${basicAuth}`,
+      headers: {
+        Authorization: `Basic ${basicAuth}`,
       },
     });
   },
@@ -74,14 +74,14 @@ module.exports = {
   postOAuthClient: (scope) => {
     const basicAuth = new Buffer(`${clientId}:${clientSecret}`).toString('base64');
     return post(token, {
-      form : {
+      form: {
         username,
         password,
         scope,
-        grant_type : 'client_credentials',
+        grant_type: 'client_credentials',
       },
-      headers : {
-        Authorization : `Basic ${basicAuth}`,
+      headers: {
+        Authorization: `Basic ${basicAuth}`,
       },
     });
   },
@@ -95,11 +95,11 @@ module.exports = {
     const basicAuth = new Buffer(`${clientId}:${clientSecret}`).toString('base64');
     return post(
       token, {
-        form : {
-          refresh_token : refreshToken,
-          grant_type    : 'refresh_token',
+        form: {
+          refresh_token: refreshToken,
+          grant_type: 'refresh_token',
         },
-        headers : {
+        headers: {
           Authorization: `Basic ${basicAuth}`,
         },
       });
@@ -117,11 +117,11 @@ module.exports = {
    * @returns {Promise} authorization resolved
    */
   getAuthorization: (options = {}) => {
-    const auth          = (options.authorization) || authorization;
-    const redirect_uri  = (options.redirect) || redirect;    // eslint-disable-line camelcase
+    const auth = (options.authorization) || authorization;
+    const redirect_uri = (options.redirect) || redirect;    // eslint-disable-line camelcase
     const response_type = (options.responseType) || 'code'; // eslint-disable-line camelcase
-    const client_id     = (options.clientId) || clientId;       // eslint-disable-line camelcase
-    const scope         = (options.scope) || '';
+    const client_id = (options.clientId) || clientId;       // eslint-disable-line camelcase
+    const scope = (options.scope) || '';
     return get(`${auth}?redirect_uri=${redirect_uri}&response_type=${response_type}&client_id=${client_id}&scope=${scope}`); // eslint-disable-line camelcase
   },
 
@@ -130,10 +130,10 @@ module.exports = {
    * @param   {String}  accessToken - The access token to get the user info from
    * @returns {Promise} User Info resolved
    */
-  getUserInfo : accessToken =>
+  getUserInfo: accessToken =>
     get({
-      url     : userinfo,
-      headers : {
+      url: userinfo,
+      headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     }),
@@ -143,10 +143,10 @@ module.exports = {
    * @param   {String}  accessToken - The access token to get the client info from
    * @returns {Promise} Client Info resolved
    */
-  getClientInfo : accessToken =>
+  getClientInfo: accessToken =>
     get({
-      url     : clientinfo,
-      headers : {
+      url: clientinfo,
+      headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     }),
@@ -156,9 +156,9 @@ module.exports = {
    * @param   {String}  accessToken - The access token to get the user info from
    * @returns {Promise} User Info resolved
    */
-  getTokenInfo : accessToken =>
+  getTokenInfo: accessToken =>
     get({
-      url : `${tokenInfo}?access_token=${accessToken}`,
+      url: `${tokenInfo}?access_token=${accessToken}`,
     }),
 
   /**
@@ -166,9 +166,9 @@ module.exports = {
    * @param   {String}  accessToken - The access token to revoke
    * @returns {Promise} User revocation resolved
    */
-  getRevokeToken : accessToken =>
+  getRevokeToken: accessToken =>
     get({
-      url : `${revokeToken}?token=${accessToken}`,
+      url: `${revokeToken}?token=${accessToken}`,
     }),
 
 };

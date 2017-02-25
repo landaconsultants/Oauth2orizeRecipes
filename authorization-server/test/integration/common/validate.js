@@ -1,8 +1,8 @@
 'use strict';
 
-const chai      = require('chai');
+const chai = require('chai');
 const sinonChai = require('sinon-chai');
-const utils     = require('../../../utils');
+const utils = require('../../../utils');
 
 chai.use(sinonChai);
 const expect = chai.expect;
@@ -73,9 +73,9 @@ validate.userJson = (response, body) => {
   expect(response.headers['content-type']).to.eql('application/json; charset=utf-8');
   expect(Object.keys(jsonResponse)).to.have.lengthOf(3);
   expect(jsonResponse).to.eql({
-    user_id : '1',
-    name    : 'Bob Smith',
-    scope   : '*',
+    user_id: '1',
+    name: 'Bob Smith',
+    scope: '*',
   });
 };
 
@@ -116,7 +116,7 @@ validate.invalidTokenInfoJson = (response, body) => {
   expect(response.headers['content-type']).to.eql('application/json; charset=utf-8');
   expect(Object.keys(jsonResponse)).to.have.lengthOf(1);
   expect(jsonResponse).to.eql({
-    error : 'invalid_token',
+    error: 'invalid_token',
   });
 };
 
@@ -154,9 +154,9 @@ validate.clientJson = (response, body) => {
   expect(response.headers['content-type']).to.eql('application/json; charset=utf-8');
   expect(Object.keys(jsonResponse)).to.have.lengthOf(3);
   expect(jsonResponse).to.eql({
-    client_id : '3',
-    name      : 'Samplr3',
-    scope     : '*',
+    client_id: '3',
+    name: 'Samplr3',
+    scope: '*',
   });
 };
 
@@ -176,8 +176,8 @@ validate.invalidCodeError = (response, body) => {
   expect(response.headers['content-type']).to.eql('application/json');
   expect(Object.keys(jsonResponse)).to.have.lengthOf(2);
   expect(jsonResponse).to.eql({
-    error             : 'invalid_grant',
-    error_description : 'Invalid authorization code',
+    error: 'invalid_grant',
+    error_description: 'Invalid authorization code',
   });
 };
 
@@ -197,8 +197,8 @@ validate.invalidRefreshToken = (response, body) => {
   expect(response.headers['content-type']).to.eql('application/json');
   expect(Object.keys(jsonResponse)).to.have.lengthOf(2);
   expect(jsonResponse).to.eql({
-    error             : 'invalid_grant',
-    error_description : 'Invalid refresh token',
+    error: 'invalid_grant',
+    error_description: 'Invalid refresh token',
   });
 };
 

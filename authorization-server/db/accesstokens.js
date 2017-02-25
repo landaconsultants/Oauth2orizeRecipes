@@ -65,7 +65,7 @@ exports.delete = (token) => {
  * @returns {Promise} resolved with an associative of tokens that were expired
  */
 exports.removeExpired = () => {
-  const keys    = Object.keys(tokens);
+  const keys = Object.keys(tokens);
   const expired = keys.reduce((accumulator, key) => {
     if (new Date() > tokens[key].expirationDate) {
       const expiredToken = tokens[key];
@@ -83,6 +83,6 @@ exports.removeExpired = () => {
  */
 exports.removeAll = () => {
   const deletedTokens = tokens;
-  tokens              = Object.create(null);
+  tokens = Object.create(null);
   return Promise.resolve(deletedTokens);
 };

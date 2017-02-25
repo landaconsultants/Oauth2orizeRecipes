@@ -1,8 +1,8 @@
 'use strict';
 
-const config  = require('./config');
-const db      = require('./db');
-const utils   = require('./utils');
+const config = require('./config');
+const db = require('./db');
+const utils = require('./utils');
 const process = require('process');
 
 /** Validate object to attach all functions to  */
@@ -96,13 +96,13 @@ validate.token = (token, accessToken) => {
   // token is a user token
   if (token.userID != null) {
     return db.users.find(token.userID)
-    .then(user => validate.userExists(user))
-    .then(user => user);
+      .then(user => validate.userExists(user))
+      .then(user => user);
   }
   // token is a client token
   return db.clients.find(token.clientID)
-  .then(client => validate.clientExists(client))
-  .then(client => client);
+    .then(client => validate.clientExists(client))
+    .then(client => client);
 };
 
 /**
@@ -161,9 +161,9 @@ validate.isRefreshToken = ({ scope }) => scope != null && scope.indexOf('offline
  * @returns {Promise} The resolved refresh token after saved
  */
 validate.generateRefreshToken = ({ userId, clientID, scope }) => {
-  const refreshToken = utils.createToken({ sub : userId, exp : config.refreshToken.expiresIn });
+  const refreshToken = utils.createToken({ sub: userId, exp: config.refreshToken.expiresIn });
   return db.refreshTokens.save(refreshToken, userId, clientID, scope)
-  .then(() => refreshToken);
+    .then(() => refreshToken);
 };
 
 /**
@@ -174,10 +174,10 @@ validate.generateRefreshToken = ({ userId, clientID, scope }) => {
  * @returns {Promise}  The resolved refresh token after saved
  */
 validate.generateToken = ({ userID, clientID, scope }) => {
-  const token      = utils.createToken({ sub : userID, exp : config.token.expiresIn });
+  const token = utils.createToken({ sub: userID, exp: config.token.expiresIn });
   const expiration = config.token.calculateExpirationDate();
   return db.accessTokens.save(token, expiration, userID, clientID, scope)
-  .then(() => token);
+    .then(() => token);
 };
 
 /**
@@ -208,7 +208,7 @@ validate.tokenForHttp = token =>
     try {
       utils.verifyToken(token);
     } catch (err) {
-      const error  = new Error('invalid_token');
+      const error = new Error('invalid_token');
       error.status = 400;
       reject(error);
     }
@@ -241,7 +241,7 @@ validate.tokenExistsForHttp = (token) => {
  */
 validate.clientExistsForHttp = (client) => {
   if (client == null) {
-    const error  = new Error('invalid_token');
+    const error = new Error('invalid_token');
     error.status = 400;
     throw error;
   }
