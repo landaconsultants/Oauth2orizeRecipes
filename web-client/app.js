@@ -5,11 +5,11 @@
 // to both without cross domain issues
 
 const finalhandler = require('finalhandler');
-const fs           = require('fs');
-const httpProxy    = require('http-proxy');
-const https        = require('https');
-const path         = require('path');
-const serveStatic  = require('serve-static');
+const fs = require('fs');
+const httpProxy = require('http-proxy');
+const https = require('https');
+const path = require('path');
+const serveStatic = require('serve-static');
 
 // TODO: Change these for your own certificates.  This was generated
 // through the commands:
@@ -18,37 +18,37 @@ const serveStatic  = require('serve-static');
 // openssl x509 -req -in certrequest.csr -signkey privatekey.pem -out certificate.pem
 const options = {
   // This is for the proxy
-  ssl : {
-    key  : fs.readFileSync(path.join(__dirname, 'certs/privatekey.pem')),
-    cert : fs.readFileSync(path.join(__dirname, 'certs/certificate.pem')),
+  ssl: {
+    key: fs.readFileSync(path.join(__dirname, 'certs/privatekey.pem')),
+    cert: fs.readFileSync(path.join(__dirname, 'certs/certificate.pem')),
   },
   // This is duplicated for the regular https server
-  key  : fs.readFileSync(path.join(__dirname, 'certs/privatekey.pem')),
-  cert : fs.readFileSync(path.join(__dirname, 'certs/certificate.pem')),
+  key: fs.readFileSync(path.join(__dirname, 'certs/privatekey.pem')),
+  cert: fs.readFileSync(path.join(__dirname, 'certs/certificate.pem')),
 };
 
 /**
  * The HTTPS Authorization Server
  */
 const authServer = httpProxy.createProxyServer({
-  target : 'https://localhost:3000',
-  secure : false,
+  target: 'https://localhost:3000',
+  secure: false,
 });
 
 /**
  * The HTTPS Resource Server
  */
 const resourceServer = httpProxy.createProxyServer({
-  target : 'https://localhost:4000',
-  secure : false,
+  target: 'https://localhost:4000',
+  secure: false,
 });
 
 /**
  * The local HTTP Resource Server
  */
 const localServer = httpProxy.createProxyServer({
-  target : 'https://localhost:6000',
-  secure : false,
+  target: 'https://localhost:6000',
+  secure: false,
 });
 
 /**

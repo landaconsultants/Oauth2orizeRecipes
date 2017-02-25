@@ -1,17 +1,17 @@
 'use strict';
 
-const bodyParser     = require('body-parser');
-const cookieParser   = require('cookie-parser');
-const config         = require('./config');
-const db             = require('./db');
-const express        = require('express');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const config = require('./config');
+const db = require('./db');
+const express = require('express');
 const expressSession = require('express-session');
-const fs             = require('fs');
-const https          = require('https');
-const passport       = require('passport');
-const path           = require('path');
-const site           = require('./site');
-const sso            = require('./sso');
+const fs = require('fs');
+const https = require('https');
+const passport = require('passport');
+const path = require('path');
+const site = require('./site');
+const sso = require('./sso');
 
 // Express configuration
 const app = express();
@@ -20,9 +20,9 @@ app.use(cookieParser());
 
 // Session Configuration
 app.use(expressSession({
-  saveUninitialized : true,
-  resave            : true,
-  secret            : config.session.secret,
+  saveUninitialized: true,
+  resave: true,
+  secret: config.session.secret,
 }));
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -51,13 +51,13 @@ app.use((err, req, res, next) => {
 // Passport configuration
 require('./auth');
 
-app.get('/',                      site.index);
-app.get('/login',                 site.loginForm);
-app.post('/login',                site.login);
-app.get('/info',                  site.info);
-app.get('/infosso',               site.infosso);
+app.get('/', site.index);
+app.get('/login', site.loginForm);
+app.post('/login', site.login);
+app.get('/info', site.info);
+app.get('/infosso', site.infosso);
 app.get('/api/protectedEndPoint', site.protectedEndPoint);
-app.get('/receivetoken',          sso.receivetoken);
+app.get('/receivetoken', sso.receivetoken);
 
 // static resources for stylesheets, images, javascript files
 app.use(express.static(path.join(__dirname, 'public')));
@@ -66,7 +66,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // in the database
 setInterval(() => {
   db.accessTokens.removeExpired()
-  .catch(err => console.error('Error trying to remove expired tokens:', err.stack));
+    .catch(err => console.error('Error trying to remove expired tokens:', err.stack));
 }, config.db.timeToCheckExpiredTokens * 1000);
 
 // TODO: Change these for your own certificates.  This was generated
@@ -75,8 +75,8 @@ setInterval(() => {
 // openssl req -new -key privatekey.pem -out certrequest.csr
 // openssl x509 -req -in certrequest.csr -signkey privatekey.pem -out certificate.pem
 const options = {
-  key  : fs.readFileSync(path.join(__dirname, 'certs/privatekey.pem')),
-  cert : fs.readFileSync(path.join(__dirname, 'certs/certificate.pem')),
+  key: fs.readFileSync(path.join(__dirname, 'certs/privatekey.pem')),
+  cert: fs.readFileSync(path.join(__dirname, 'certs/certificate.pem')),
 };
 
 // This setting is so that our certificates will work although they are all self signed

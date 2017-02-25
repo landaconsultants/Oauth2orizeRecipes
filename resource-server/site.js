@@ -1,8 +1,8 @@
 'use strict';
 
-const login    = require('connect-ensure-login');
+const login = require('connect-ensure-login');
 const passport = require('passport');
-const sso      = require('./sso');
+const sso = require('./sso');
 
 /**
  * https://localhost:4000/
@@ -54,11 +54,11 @@ exports.login = passport.authenticate('local', { successReturnToOrRedirect: '/',
 exports.info = [
   login.ensureLoggedIn(),
   (req, res) => {
-    const accessToken  = req.user.accessToken;
+    const accessToken = req.user.accessToken;
     const refreshToken = req.user.refreshToken;
     res.render('info', {
-      access_token  : accessToken,
-      refresh_token : refreshToken,
+      access_token: accessToken,
+      refresh_token: refreshToken,
     });
   },
 ];
@@ -90,11 +90,11 @@ exports.info = [
 exports.infosso = [
   sso.ensureSingleSignOn(),
   (req, res) => {
-    const accessToken  = req.session.accessToken;
+    const accessToken = req.session.accessToken;
     const refreshToken = req.session.refreshToken;
     res.render('info', {
-      access_token  : accessToken,
-      refresh_token : refreshToken,
+      access_token: accessToken,
+      refresh_token: refreshToken,
     });
   },
 ];

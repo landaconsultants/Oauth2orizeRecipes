@@ -1,11 +1,11 @@
 'use strict';
 
 const BearerStrategy = require('passport-http-bearer').Strategy;
-const config         = require('./config');
-const db             = require('./db');
-const LocalStrategy  = require('passport-local').Strategy;
-const passport       = require('passport');
-const request        = require('request');
+const config = require('./config');
+const db = require('./db');
+const LocalStrategy = require('passport-local').Strategy;
+const passport = require('passport');
+const request = require('request');
 
 /* eslint-disable camelcase */
 
@@ -30,11 +30,11 @@ const request        = require('request');
 passport.use(new LocalStrategy((username, password, done) => {
   const basicAuth = new Buffer(`${config.client.clientID}:${config.client.clientSecret}`).toString('base64');
   request.post('https://localhost:3000/oauth/token', {
-    form : {
+    form: {
       username,
       password,
-      grant_type : 'password',
-      scope      : 'offline_access',
+      grant_type: 'password',
+      scope: 'offline_access',
     },
     headers: {
       Authorization: `Basic ${basicAuth}`,
@@ -45,14 +45,14 @@ passport.use(new LocalStrategy((username, password, done) => {
       // TODO: scopes
       const expirationDate = expires_in ? new Date(Date.now() + (expires_in * 1000)) : null;
       db.accessTokens.save(access_token, expirationDate, config.client.clientID)
-      .then(() => {
-        if (refresh_token != null) {
-          return db.refreshTokens.save(refresh_token, config.client.clientID);
-        }
-        return Promise.resolve();
-      })
-      .then(done(null, { accessToken: access_token, refreshToken: refresh_token }))
-      .catch(() => done(null, false));
+        .then(() => {
+          if (refresh_token != null) {
+            return db.refreshTokens.save(refresh_token, config.client.clientID);
+          }
+          return Promise.resolve();
+        })
+        .then(done(null, { accessToken: access_token, refreshToken: refresh_token }))
+        .catch(() => done(null, false));
     }
   });
 }));
@@ -67,30 +67,30 @@ passport.use(new LocalStrategy((username, password, done) => {
  */
 passport.use(new BearerStrategy((accessToken, done) => {
   db.accessTokens.find(accessToken)
-  .then((token) => {
-    if (token != null && new Date() > token.expirationDate) {
-      db.accessTokens.delete(accessToken)
-      .then(() => null);
-    }
-    return token;
-  })
-  .then((token) => {
-    if (token == null) {
-      const tokeninfoURL = config.authorization.tokeninfoURL;
-      request.get(tokeninfoURL + accessToken, (error, response, body) => {
-        if (error != null || response.statusCode !== 200) {
-          throw new Error('Token request not valid');
-        }
-        const { expires_in } = JSON.parse(body);
-        const expirationDate = expires_in ? new Date(Date.now() + (expires_in * 1000)) : null;
-        // TODO: scopes
-        return db.accessTokens.save(accessToken, expirationDate, config.client.clientID);
-      });
-    }
-    return token;
-  })
-  .then(() => done(null, accessToken))
-  .catch(() => done(null, false));
+    .then((token) => {
+      if (token != null && new Date() > token.expirationDate) {
+        db.accessTokens.delete(accessToken)
+          .then(() => null);
+      }
+      return token;
+    })
+    .then((token) => {
+      if (token == null) {
+        const tokeninfoURL = config.authorization.tokeninfoURL;
+        request.get(tokeninfoURL + accessToken, (error, response, body) => {
+          if (error != null || response.statusCode !== 200) {
+            throw new Error('Token request not valid');
+          }
+          const { expires_in } = JSON.parse(body);
+          const expirationDate = expires_in ? new Date(Date.now() + (expires_in * 1000)) : null;
+          // TODO: scopes
+          return db.accessTokens.save(accessToken, expirationDate, config.client.clientID);
+        });
+      }
+      return token;
+    })
+    .then(() => done(null, accessToken))
+    .catch(() => done(null, false));
 }));
 
 // Register serialialization and deserialization functions.

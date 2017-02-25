@@ -6,8 +6,8 @@
  * screen.
  */
 exports.client = {
-  clientID     : 'trustedClient',
-  clientSecret : 'ssh-otherpassword',
+  clientID: 'trustedClient',
+  clientSecret: 'ssh-otherpassword',
 };
 
 // TODO Compact this more
@@ -16,13 +16,13 @@ exports.client = {
  * The Authorization server's location, port number, and the token info end point
  */
 exports.authorization = {
-  host         : 'localhost',
-  port         : '3000',
-  url          : 'https://localhost:3000/',
-  tokenURL     : 'oauth/token',
-  authorizeURL : 'https://localhost:3000/dialog/authorize',
-  tokeninfoURL : 'https://localhost:3000/api/tokeninfo?access_token=',
-  redirectURL  : 'https://localhost:4000/receivetoken',
+  host: 'localhost',
+  port: '3000',
+  url: 'https://localhost:3000/',
+  tokenURL: 'oauth/token',
+  authorizeURL: 'https://localhost:3000/dialog/authorize',
+  tokeninfoURL: 'https://localhost:3000/api/tokeninfo?access_token=',
+  redirectURL: 'https://localhost:4000/receivetoken',
 };
 
 /**
@@ -34,7 +34,7 @@ exports.authorization = {
  * @type {{timeToCheckExpiredTokens: number}}
  */
 exports.db = {
-  timeToCheckExpiredTokens : 3600,
+  timeToCheckExpiredTokens: 3600,
 };
 
 /**
